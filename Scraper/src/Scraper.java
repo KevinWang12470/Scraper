@@ -1,4 +1,5 @@
 import java.net.URL;
+import java.util.Scanner;
 
 public class Scraper {
     /**
@@ -11,7 +12,25 @@ public class Scraper {
 
         System.out.println("Hello World!");
 
-        URL webAddress = new URL("www.youtube.com");
+        //Instantiate a URL
+        URL webAddress = new URL("https://www.youtube.com");
 
+        System.out.println("URL: " + webAddress);
+
+        System.out.println("Content : " + webAddress.getContent());
+
+        Scanner scanner = new Scanner(webAddress.openStream());
+
+        StringBuffer strBuffer = new StringBuffer();
+
+        while (scanner.hasNext()) {
+            strBuffer.append(scanner.next());
+        }
+
+        String result = strBuffer.toString();
+
+        result = result.replaceAll("<[^>]*>", "");
+
+        System.out.println("Contents: " + result);
     }
 }
