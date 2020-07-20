@@ -20,7 +20,9 @@ public class Scraper {
         System.out.println("Hello World!");
 
         //Instantiate a URL
-        URL webAddress = new URL("exampleStuff.html");
+
+        URL webAddress = new URL(
+                "https://www.pickerington.k12.oh.us/pickerington-central-high/directory/049048051054/");
 
         //System.out.println("URL: " + webAddress);
 
@@ -39,9 +41,7 @@ public class Scraper {
 
         String result = strBuffer.toString();
 
-        System.out.println(result);
-
-        result = result.replaceAll("<[^>]*>", " ");
+//        result = result.replaceAll("<[^>]*>", "");
 
 //        System.out.println("Contents: " + result);
 
@@ -51,7 +51,7 @@ public class Scraper {
     }
 
     public void parse(String t) {
-        String[] splits = t.split(" ");
+        String[] splits = t.split(" |\\(|\\)|\\:|\\;|\\<|\\>");
         for (String s : splits) {
             for (int i = 0; i < s.length(); i++) {
                 if (s.substring(i, i + 1).equals("@")) {
