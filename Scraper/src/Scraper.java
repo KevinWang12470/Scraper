@@ -1,3 +1,4 @@
+import java.io.File;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -19,27 +20,33 @@ public class Scraper {
         System.out.println("Hello World!");
 
         //Instantiate a URL
-        URL webAddress = new URL("https://www.youtube.com");
+        URL webAddress = new URL("exampleStuff.html");
 
-//        System.out.println("URL: " + webAddress);
+        //System.out.println("URL: " + webAddress);
 
-//        System.out.println("Content : " + webAddress.getContent());
+        //System.out.println("Content : " + webAddress.getContent());
+
+        File exampleHTML = new File(
+                "E:\\Users\\knwg2\\Documents\\_SchoolDocuments\\OsuCseWsTemplate\\nonOSU\\Scraper\\Scraper\\src\\exampleStuff.html");
 
         Scanner scanner = new Scanner(webAddress.openStream());
 
         StringBuffer strBuffer = new StringBuffer();
 
         while (scanner.hasNext()) {
-            strBuffer.append(scanner.next());
+            strBuffer.append(scanner.next() + " ");
         }
 
         String result = strBuffer.toString();
 
-        result = result.replaceAll("<[^>]*>", "");
+        System.out.println(result);
+
+        result = result.replaceAll("<[^>]*>", " ");
 
 //        System.out.println("Contents: " + result);
 
         this.temp = result;
+        scanner.close();
 
     }
 
