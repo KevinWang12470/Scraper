@@ -35,6 +35,13 @@ public class Scraper {
 //        System.out.println("URL: " + webAddress);
 //        System.out.println("Content : " + webAddress.getContent());
 
+        //System.out.println("URL: " + webAddress);
+
+        //System.out.println("Content : " + webAddress.getContent());
+
+        File exampleHTML = new File(
+                "E:\\Users\\knwg2\\Documents\\_SchoolDocuments\\OsuCseWsTemplate\\nonOSU\\Scraper\\Scraper\\src\\exampleStuff.html");
+
         Scanner scanner = new Scanner(webAddress.openStream());
         StringBuffer strBuffer = new StringBuffer();
         while (scanner.hasNext()) {
@@ -44,6 +51,7 @@ public class Scraper {
 //        result = result.replaceAll("<[^>]*>", "");
         System.out.println("Contents: " + result);
         this.temp = result;
+        scanner.close();
 
     }
 
