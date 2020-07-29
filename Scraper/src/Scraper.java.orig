@@ -30,42 +30,36 @@ public class Scraper {
         scraper.parse(scraper.temp);
     }
 
-    /**
-     * Prompts for a user input URL. Takes this url and scans the contents of
-     * its web page and returns those contents.
-     *
-     * @throws Exception
-     */
     public void getURL() throws Exception {
         //Instantiate a URL
+
         URL webAddress = new URL(JOptionPane.showInputDialog("Enter url"));
 //        System.out.println("URL: " + webAddress);
 //        System.out.println("Content : " + webAddress.getContent());
 
-        //System.out.println("URL: " + webAddress);
+        System.out.println("URL: " + webAddress);
 
-        //System.out.println("Content : " + webAddress.getContent());
+//        System.out.println("Content : " + webAddress.getContent());
+
+        File exampleHTML = new File(
+                "E:\\Users\\knwg2\\Documents\\_SchoolDocuments\\OsuCseWsTemplate\\nonOSU\\Scraper\\Scraper\\src\\exampleStuff.html");
 
         Scanner scanner = new Scanner(webAddress.openStream());
+
         StringBuffer strBuffer = new StringBuffer();
         while (scanner.hasNext()) {
             strBuffer.append(scanner.next() + " ");
         }
         String result = strBuffer.toString();
+
 //        result = result.replaceAll("<[^>]*>", "");
         System.out.println("Contents: " + result);
+
         this.temp = result;
         scanner.close();
 
     }
 
-    /**
-     * Takes the contents of the user input webpage and parses it for valid
-     * emails.
-     * 
-     * @param t
-     *            A string containing the contents of the web page being scraped
-     */
     public void parse(String t) {
         String[] splits = t.split(" |\\(|\\)|\\:|\\;|\\<|\\>|\\\\");
         for (String s : splits) {
