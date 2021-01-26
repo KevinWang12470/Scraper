@@ -3,23 +3,28 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JOptionPane;
 
 public class Scraper {
 
     private String temp;
-    private String[] Exts = new String[] { ".com", ".org", ".gov", ".us",
-            ".ca" };//add more if ya feel like it
     private File file = new File("OUTPUT.txt");
+
+    private String webName;
+    private ArrayList<String> emails = new ArrayList<String>();
+//    private ArrayList<String> links = new ArrayList<String>();
+
     FileOutputStream out;
 
     public Scraper() {
         try {
             this.out = new FileOutputStream(this.file);
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -28,6 +33,7 @@ public class Scraper {
         Scraper scraper = new Scraper();
         scraper.getURL();
         scraper.parse(scraper.temp);
+        scraper.printToFile();
     }
 
     /**
@@ -38,13 +44,15 @@ public class Scraper {
      */
     public void getURL() throws Exception {
         //Instantiate a URL
-        URL webAddress = new URL(JOptionPane.showInputDialog("Enter url"));
+    	webName = JOptionPane.showInputDialog("Enter url");
+        URL webAddress = new URL(webName);
 //        System.out.println("URL: " + webAddress);
 //        System.out.println("Content : " + webAddress.getContent());
 
         //System.out.println("URL: " + webAddress);
 
         //System.out.println("Content : " + webAddress.getContent());
+
 
         Scanner scanner = new Scanner(webAddress.openStream());
         StringBuffer strBuffer = new StringBuffer();
@@ -53,7 +61,7 @@ public class Scraper {
         }
         String result = strBuffer.toString();
 //        result = result.replaceAll("<[^>]*>", "");
-        System.out.println("Contents: " + result);
+//        System.out.println("Contents: " + result);
         this.temp = result;
         scanner.close();
 
@@ -67,35 +75,41 @@ public class Scraper {
      *            A string containing the contents of the web page being scraped
      */
     public void parse(String t) {
-        String[] splits = t.split(" |\\(|\\)|\\:|\\;|\\<|\\>|\\\\");
-        for (String s : splits) {
-            /*
-             * for (int i = 0; i < s.length(); i++) { if (s.substring(i, i +
-             * 1).equals("@")) { System.out.println(s); } }
-             */
-            boolean hasAt = false;
-            boolean hasExt = false;
-            if (s.contains("@")) {
-                hasAt = true;
-            }
-            for (String e : this.Exts) {
-                if (s.contains(e)) {
-                    hasExt = true;
-                    break;
-                }
-            }
-            if (hasAt && hasExt) {//if email
-                System.out.println(s);
-                try {
-                    this.out.write((s + "\n").getBytes());
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                }
-            } else if (hasExt) {//if url
-//        		System.out.println(s);
-            }
-        }
+    	
+    	String eRegex = "(^[\\w!#$%&’*+/=?`{|}~^-]+(?:\\.[\\w!#$%&’*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$)";
+    	Pattern ePattern = Pattern.compile(eRegex);
+//    	String lRegex = "((http|https)://)(www.)?"
+//                + "[a-zA-Z0-9@:%._\\+~#?&//=]"
+//                + "{2,256}\\.[a-z]"
+//                + "{2,6}\\b([-a-zA-Z0-9@:%"
+//                + "._\\+~#?&//=]*)";
+//    	Pattern lPattern = Pattern.compile(lRegex);
+    	
+    	String[] splits = t.split(" |\\(|\\)|\\:|\\;|\\<|\\>|\\\\");
+    	
+    	for (String s : splits) {
+    		Matcher eMatch = ePattern.matcher(s);
+    		if (eMatch.matches()) {
+    			emails.add(s);
+    		}
+//    		Matcher lMatch = lPattern.matcher(s);
+//    		if (lMatch.matches()) {
+//    			links.add(s);
+//    		}
+    	}
+    	
+    }
+    
+    public void printToFile() {
+    	try {
+			out.write(("emails found in " + webName + ":\n").getBytes());
+			for (String s : emails) out.write((s + "\n").getBytes());
+//			out.write(("links found in " + webName + ":\n").getBytes());
+//			for (String s : links) out.write((s + "\n").getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
     }
 
 }
